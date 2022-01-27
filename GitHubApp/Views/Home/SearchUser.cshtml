@@ -1,0 +1,55 @@
+﻿@using GitHubApp.Models
+@model UserViewModel
+@{
+    ViewBag.Title = "SearchUser";
+}
+
+<h2>SearchUser</h2>
+@using (Html.BeginForm("SearchUser", "Home", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.TextBoxFor(m => m.UserDetails.LogIn)
+        <input type="submit" value="Submit" />
+    </div>
+
+        if (Model.UserDetails != null)
+        {
+        if (Model.UserDetails.Avatar_url != null)
+        {
+        <p class="alert alert-success" id="avatar">
+            <img src="@Url.Content(@Model.UserDetails.Avatar_url)" alt="Not Found" />
+        </p>
+        }
+        if (Model.UserDetails.LogIn != null)
+        {
+        <p class="alert alert-success" id="logIn">@Model.UserDetails.LogIn , @Model.UserDetails.Location</p>
+        }
+        }
+
+        if (Model.UserRepCollections.Repositories != null)
+        {
+        <div class="form-group">
+            <table class="table">
+                <tbody>
+                    <tr><th>Name</th><th>Description</th><th>Stargazers</th></tr>
+                    @foreach (Repositories r in Model.UserRepCollections.Repositories.OrderByDescending(x=>x.Stargazers_count).Take(5))
+                    {
+                        <tr>
+                            <td>
+                                <a id="repoLink" href="@r.Html_url" target="_blank">@r.Name</a>
+                            </td>
+                            <td>
+                                @r.Description
+                            </td>
+                            <td>
+                                @r.Stargazers_count
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        }
+        }
+
